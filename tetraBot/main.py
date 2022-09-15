@@ -5,17 +5,21 @@ import sys
 
 import discord
 from discord.ext import commands, tasks
-from util import *
 import aioconsole
 
 intents = discord.Intents().all()
 
 client = commands.Bot(intents=intents, command_prefix='=!', help_command=None)
+test_mode = "-t" in sys.argv
 
 file_name = "sources/source_test.json" \
-    if "-t" in sys.argv else "sources/source.json"
+    if test_mode else "sources/source.json"
 with open(file_name, 'r', encoding="utf-8") as file:
     sources = json.load(file)
+
+file_name = "token.man"
+with open(file_name, 'r', encoding="utf-8") as file:
+    TOKEN = file.read()
 
 
 def is_from_guild(ctx):
@@ -54,10 +58,10 @@ async def on_ready():
 
     await client.load_extension('cogs.addon')
 
-    if file_name == "sources/source_test.json":
+    if test_mode:
         await client.change_presence(status=discord.Status.do_not_disturb, activity=discord.Game("점검 중이에요!"))
         print("Bot is ready for development.")
-    if file_name == "sources/source.json":
+    else:
         await client.change_presence(status=discord.Status.online, activity=discord.Game("@_@"))
         print("Bot is ready for service.")
 
@@ -198,4 +202,4 @@ async def roll(ctx):
         return
 
 
-client.run(sources["TOKEN"])
+client.run(TOKEN)
