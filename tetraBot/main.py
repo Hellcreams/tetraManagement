@@ -12,8 +12,8 @@ intents = discord.Intents().all()
 
 client = commands.Bot(intents=intents, command_prefix='=!', help_command=None)
 
-file_name = "source_test.json" \
-    if "-t" in sys.argv else "source.json"
+file_name = "sources/source_test.json" \
+    if "-t" in sys.argv else "sources/source.json"
 with open(file_name, 'r', encoding="utf-8") as file:
     sources = json.load(file)
 
@@ -44,7 +44,7 @@ async def job_guest(automatic=True):
 @tasks.loop(seconds=1)
 async def send_console_msg():
     cc = await aioconsole.ainput()
-    await client.get_channel(559613873368465420).send(cc)
+    await client.get_channel(1019905130956607551).send(cc)
 
 
 @client.event
@@ -52,17 +52,14 @@ async def on_ready():
     job_guest.start()
     send_console_msg.start()
 
-    if file_name == "source_test.json":
+    await client.load_extension('cogs.addon')
+
+    if file_name == "sources/source_test.json":
         await client.change_presence(status=discord.Status.do_not_disturb, activity=discord.Game("점검 중이에요!"))
         print("Bot is ready for development.")
-    if file_name == "source.json":
+    if file_name == "sources/source.json":
         await client.change_presence(status=discord.Status.online, activity=discord.Game("@_@"))
         print("Bot is ready for service.")
-
-
-@client.command()
-async def ping(ctx):
-    await ctx.send(f"Pong! {client.latency:.3f}s")
 
 
 @client.command(aliases=["리그모집"])
