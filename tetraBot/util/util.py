@@ -1,5 +1,8 @@
 import datetime
 import discord
+import os
+import json
+
 
 def seconds_until(hours, minutes):
     given_time = datetime.time(hours, minutes)
@@ -16,3 +19,23 @@ def get_args(msg):
         return msg.content.split(' ')
     else:
         raise ValueError("The argument is not discord.Message")
+
+
+def is_from_guild(ctx):
+    if isinstance(ctx.author, discord.Member):
+        return True
+    else:
+        return False
+
+
+def get_source(name=None):
+    source_path = os.getcwd() + "/../sources/source_real.json"
+
+    # load source
+    with open(source_path, 'r', encoding="utf-8") as file:
+        sources = json.load(file)
+
+    if name is None:
+        return sources
+    else:
+        return sources[name]

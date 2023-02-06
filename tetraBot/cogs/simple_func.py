@@ -1,5 +1,5 @@
 from discord.ext import commands
-from tetraBot.cog_util import *
+from tetraBot.util import util
 import random
 
 
@@ -7,6 +7,11 @@ class Example(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+        self.sources = util.get_source()
+
+    def has_role(self, member, role_name):
+        return self.client.get_guild(
+            self.sources["guild_id"]).get_role(self.sources["role_id"][role_name]) in member.roles
 
     @commands.command()
     async def ping(self, ctx):
@@ -14,13 +19,13 @@ class Example(commands.Cog):
 
     @commands.command(aliases=["도움말"])
     async def help(self, ctx):
-        with open("help_command.txt", "r", encoding="utf-8") as text:
+        with open("../util/help_command.txt", "r", encoding="utf-8") as text:
             await ctx.author.send(text.read())
         return
 
     @commands.command(aliases=["굴려"])
     async def roll(self, ctx):
-        args = get_args(ctx.message)
+        args = util.get_args(ctx.message)
 
         if len(args) < 2:
             await ctx.send("굴릴 대상을 적어주세요. `주사위`, `동전`, `발로란트맵` 등")
@@ -35,7 +40,7 @@ class Example(commands.Cog):
             return
 
         if args[1] == "발로란트맵":
-            await ctx.message.reply(f"맵을 골라버려욧! : `{random.choice(sources['vlrt_maps'])}`")
+            await ctx.message.reply(f"맵을 골라버려욧! : `{random.choice(self.sources['vlrt_maps'])}`")
             return
 
 
