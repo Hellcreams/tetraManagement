@@ -1,7 +1,7 @@
 import random
 import json
 import asyncio
-import sys
+import os
 from tetraBot.util import util
 
 import discord
@@ -11,12 +11,6 @@ import aioconsole
 intents = discord.Intents().all()
 
 client = commands.Bot(intents=intents, command_prefix='=!', help_command=None)
-test_mode = "-t" in sys.argv
-
-file_name = "sources/source.json" \
-    if test_mode else "sources/source_real.json"
-with open(file_name, 'r', encoding="utf-8") as file:
-    sources = json.load(file)
 
 file_name = "token.man"
 with open(file_name, 'r', encoding="utf-8") as file:
@@ -33,17 +27,19 @@ async def send_console_msg():
 
 @client.event
 async def on_ready():
-    job_guest.start()
-    send_console_msg.start()
+    cogs_path = os.getcwd() + "/cogs"
+    cogs = os.listdir(cogs_path)
+    print(cogs)
+    print(cogs[0][-3:])
+
+    for cog in cogs:
+        if cog[-3:] == ".py":
+            await client.load_extension(cog)
 
     await client.load_extension('cogs.addon')
 
-    if test_mode:
-        await client.change_presence(status=discord.Status.do_not_disturb, activity=discord.Game("점검 중이에요!"))
-        print("Bot is ready for development.")
-    else:
-        await client.change_presence(status=discord.Status.online, activity=discord.Game("@_@"))
-        print("Bot is ready for service.")
+    await client.change_presence(status=discord.Status.online, activity=discord.Game("@_@"))
+    print("Bot is ready.")
 
 
 client.run(TOKEN)
