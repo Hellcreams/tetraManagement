@@ -10,7 +10,7 @@ import aioconsole
 
 intents = discord.Intents().all()
 
-client = commands.Bot(intents=intents, command_prefix='=!', help_command=None)
+client = commands.Bot(intents=intents, help_command=None)
 test_mode = "-t" in sys.argv
 
 file_name = "sources/source.json" \
@@ -23,19 +23,15 @@ with open(file_name, 'r', encoding="utf-8") as file:
     TOKEN = file.read()
 
 # console command
-"""
+
 @tasks.loop(seconds=1)
 async def send_console_msg():
     cc = await aioconsole.ainput()
     await client.get_channel(1019905130956607551).send(cc)
-"""
 
 
 @client.event
 async def on_ready():
-    job_guest.start()
-    send_console_msg.start()
-
     await client.load_extension('cogs.addon')
 
     if test_mode:
