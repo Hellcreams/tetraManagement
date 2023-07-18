@@ -1,0 +1,14 @@
+{
+  "commands": [
+    {
+      "name" : "nanda",
+      "type": 1,
+      "description": "something for member."
+    },
+    {
+      "name": "nanda2",
+      "type": 1,
+      "description": "something for normal"
+    }
+  ]
+}
