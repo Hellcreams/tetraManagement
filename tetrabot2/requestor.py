@@ -3,8 +3,13 @@ import json
 import os
 
 url = "https://discord.com/api/v10/applications/1019903151639384084/commands"
+
+# Read Token
+file_name = "token.man"
+with open(file_name, 'r', encoding="utf-8") as file:
+    TOKEN = file.read()
 headers = {
-    "Authorization": "Bot MTAxOTkwMzE1MTYzOTM4NDA4NA.GLSkf_.qo4lnsHgD8oEsKG_wfylqe9UW1mzCJ1o-Us3RE"
+    "Authorization": "Bot " + TOKEN
 }
 
 os.chdir("cogs")
